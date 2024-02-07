@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AlarmTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Alarm _alarm;
 
-    // Update is called once per frame
-    void Update()
+    private bool _isRobberInside = false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.TryGetComponent(out Robber robber))
+        {
+            if (_isRobberInside == false)
+            {
+                _alarm.SoundOn();
+                _isRobberInside = true;
+            }
+            else
+            {
+                _alarm.SoundOff();
+                _isRobberInside = false;
+            }
+        }
     }
 }
