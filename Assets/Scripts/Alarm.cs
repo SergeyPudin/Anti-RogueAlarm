@@ -13,7 +13,7 @@ public class Alarm : MonoBehaviour
         float currentVolume = 0;
         float targetVolume = 1;
 
-        CheckCorutineForNull();
+        TryToStopCoroutine();
 
         _audioSource.Play();
 
@@ -25,15 +25,12 @@ public class Alarm : MonoBehaviour
         float currentVolume = 1;
         float targetVolume = 0;
 
-        CheckCorutineForNull();
+        TryToStopCoroutine();
 
-        _coroutine= StartCoroutine(AdjustSound(currentVolume,targetVolume));
-
-        if (_audioSource.volume ==  0)  
-            _audioSource.Stop();
+        _coroutine= StartCoroutine(AdjustSound(currentVolume,targetVolume));        
     }
 
-    private void CheckCorutineForNull()
+    private void TryToStopCoroutine()
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
