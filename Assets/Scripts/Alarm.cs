@@ -9,35 +9,36 @@ public class Alarm : MonoBehaviour
     private Coroutine _coroutine;
    
     public void SoundOn()
-    {
-        float currentVolume = 0;
+    {        
         float targetVolume = 1;
 
-        TryToStopCoroutine();
+        StopCoroutineIfRun();
 
         _audioSource.Play();
+        _audioSource.volume = 0;
 
-        _coroutine = StartCoroutine(AdjustSound(currentVolume, targetVolume));
+        _coroutine = StartCoroutine(AdjustSound(targetVolume));
     }
 
     public void SoundOff()
     {
-        float currentVolume = 1;
         float targetVolume = 0;
 
-        TryToStopCoroutine();
+        StopCoroutineIfRun();
 
-        _coroutine= StartCoroutine(AdjustSound(currentVolume,targetVolume));        
+        _coroutine= StartCoroutine(AdjustSound(targetVolume));      
     }
 
-    private void TryToStopCoroutine()
+    private void StopCoroutineIfRun()
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
     }
 
-    private IEnumerator AdjustSound(float currentVolume, float targetVolume)
+    private IEnumerator AdjustSound(float targetVolume)
     {
+        float currentVolume = _audioSource.volume;
+
         while (currentVolume != targetVolume)
         {
             currentVolume = Mathf.MoveTowards(currentVolume, targetVolume, _adjustSpeed * Time.deltaTime);
@@ -46,5 +47,8 @@ public class Alarm : MonoBehaviour
 
             yield return null;
         }
+
+        if (_audioSource.volume == 0)       
+            _audioSource.Stop();           
     }
 }
